@@ -11,10 +11,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
+int IsFullScreen(SDL_Surface *surface)
+{
+	// Return true if fullscreen
+	if (surface->flags & SDL_WINDOW_FULLSCREEN) return 1;
 
+	// Return false if windowed
+	return 0;
+}
 
 int main(int argc, char ** argsv)
 {
+	
 	//Initialises the SDL Library, passing in SDL_INIT_VIDEO to only initialise the video subsystems
 	//https://wiki.libsdl.org/SDL_Init
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -27,7 +35,7 @@ int main(int argc, char ** argsv)
 
 	//Create a window, note we have to free the pointer returned using the DestroyWindow Function
 	//https://wiki.libsdl.org/SDL_CreateWindow
-	SDL_Window* window = SDL_CreateWindow("SDL2 Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 640, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+	SDL_Window* window = SDL_CreateWindow("SDL2 Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1440, 900, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	//Checks to see if the window has been created, the pointer will have a value of some kind
 	if (window == nullptr)
 	{
@@ -89,7 +97,7 @@ int main(int argc, char ** argsv)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
 	//Projection Matrix 45 Degree FOV 16:9 Aspect Ratio display range of 0.1 to 100
-	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)4.0f / (float)3.0f, 0.1f, 100.0f);
+	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)16.0f / (float)9.0f, 0.1f, 100.0f);
 
 	//camera Matrix
 	glm::mat4 View = glm::lookAt(
@@ -124,8 +132,10 @@ int main(int argc, char ** argsv)
 	bool running = true;
 	//SDL Event structure, this will be checked in the while loop
 	SDL_Event ev;
+	SDL_Surface *mwindow;
 	while (running)
 	{
+		
 		//Poll for the events which have happened in this frame
 		//https://wiki.libsdl.org/SDL_PollEvent
 		while (SDL_PollEvent(&ev))
@@ -146,16 +156,17 @@ int main(int argc, char ** argsv)
 				case SDLK_ESCAPE:
 					running = false;
 					break;
-				case SDLK_e:
-					float Angle = glm::pi<float>() * 1.0f;
-					glm::vec3 Axis(1, 0, 0);
-					Model = glm::rotate(Model, Angle, Axis);
+				case SDLK_1:
+					SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+					break;
+				case SDLK_2:
+					SDL_SetWindowSize(window, 1440, 900);
 					break;
 				}
 			}
 		}
 		//Do rendering here!
-		glClearColor(0.0, 0.0, 0.0, 1.0);
+		glClearColor(0.0, 10.0, 0.0, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(programID);
