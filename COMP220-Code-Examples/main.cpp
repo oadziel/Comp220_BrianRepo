@@ -35,7 +35,8 @@ int main(int argc, char ** argsv)
 
 	//Create a window, note we have to free the pointer returned using the DestroyWindow Function
 	//https://wiki.libsdl.org/SDL_CreateWindow
-	SDL_Window* window = SDL_CreateWindow("SDL2 Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1440, 900, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	//Create SDL Window size 1600 x 900 resizable
+	SDL_Window* window = SDL_CreateWindow("SDL2 Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1600, 900, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	//Checks to see if the window has been created, the pointer will have a value of some kind
 	if (window == nullptr)
 	{
@@ -156,11 +157,9 @@ int main(int argc, char ** argsv)
 				case SDLK_ESCAPE:
 					running = false;
 					break;
+				//Set Window Fullscreen on press 1 on keyboard
 				case SDLK_1:
 					SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-					break;
-				case SDLK_2:
-					SDL_SetWindowSize(window, 1440, 900);
 					break;
 				}
 			}
